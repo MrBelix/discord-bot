@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,9 @@ namespace Belix.DiscordBot.Core
 
         public readonly ConfigurationBuilder Configuration;
 
+        private IEnumerable<Type>? _extensions = null;
+
+
         public Builder(string[] args)
         {
             Services = new ServiceCollection();
@@ -24,7 +28,12 @@ namespace Belix.DiscordBot.Core
 
         public Application<T> Build()
         { 
-            return new Application<T>(BuildServices());
+            return new Application<T>(BuildServices(), _extensions);
+        }
+
+        public void AddExtensions(Assembly? assembly)
+        {
+            _extensions = assembly?.GetTypes().Where(t => t.IsDefined(typeof(BotExtensionAttribute))).ToList();
         }
 
         private IServiceProvider BuildServices()

@@ -13,7 +13,7 @@ builder.Configuration
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json");
 
-builder.AddExtensions(Assembly.GetEntryAssembly()) ;
+builder.AddExtensions(Assembly.GetEntryAssembly());
 
 builder.Services
     .AddSingleton<DiscordSocketClient>()

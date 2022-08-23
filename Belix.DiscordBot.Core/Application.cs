@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Belix.DiscordBot.Core
 {
-    public sealed class Application
+    public sealed class Application<T> where T : IStartup
     {
         private readonly IServiceProvider _services;
 
@@ -21,7 +21,7 @@ namespace Belix.DiscordBot.Core
 
         private async Task RunAsync()
         {
-            var startup = _services.GetRequiredService<IStartup>();
+            var startup = (IStartup)ActivatorUtilities.CreateInstance(_services, typeof(T));
             await startup.RunAsync();
 
             await Task.Delay(Timeout.Infinite);

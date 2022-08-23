@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Belix.DiscordBot.Core\Belix.DiscordBot.Core.csproj" />
   </ItemGroup>
 
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<Copy SourceFiles="appsettings.json" DestinationFolder="$(OutDir)" />
+	</Target>
+
 </Project>

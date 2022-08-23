@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Belix.DiscordBot.Core.Interfaces;
+using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Belix.DiscordBot.Core
 {
-    public sealed class Builder
+    public sealed class Builder<T> where T : IStartup
     {
         public readonly IServiceCollection Services;
 
@@ -21,13 +22,15 @@ namespace Belix.DiscordBot.Core
             Configuration = new ConfigurationBuilder();
         }
 
-        public Application Build()
+        public Application<T> Build()
         { 
-            return new Application(BuildServices());
+            return new Application<T>(BuildServices());
         }
 
         private IServiceProvider BuildServices()
         {
+            ConfigureServices();
+
             return Services.BuildServiceProvider();
         }
 

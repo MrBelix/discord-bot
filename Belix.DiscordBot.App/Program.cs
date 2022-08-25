@@ -9,16 +9,9 @@ using System.Reflection;
 
 var builder = new Builder<Startup>(args);
 
-builder.Configuration
-    .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.json");
-
-builder.AddExtensions(Assembly.GetEntryAssembly());
-
-builder.Services
-    .AddSingleton<DiscordSocketClient>()
-    .AddSingleton<InteractionService>();
-
 builder
+    .AddConfig(builder => builder.AddJsonFile("appsettings.json"))
+    .AddInjections()
+    .AddExtensions(Assembly.GetEntryAssembly())
     .Build()
     .Run();

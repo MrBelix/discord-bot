@@ -1,8 +1,10 @@
-﻿using Belix.DiscordBot.Core;
+﻿using Belix.DiscordBot.App.Entities;
+using Belix.DiscordBot.Core;
 using Belix.DiscordBot.Core.Interfaces;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +21,14 @@ namespace Belix.DiscordBot.App.Extensions
         private readonly DiscordSocketClient _client;
         private readonly IServiceProvider _services;
         private readonly InteractionService _interactionService;
+        private readonly GuildOptions _guildOptions;
 
-        public SlashCommandExtension(DiscordSocketClient client, IServiceProvider services, InteractionService interactionService)
+        public SlashCommandExtension(DiscordSocketClient client, IServiceProvider services, InteractionService interactionService, IOptions<GuildOptions> guildOptions)
         {
             _client = client;
             _services = services;
             _interactionService = interactionService;
+            _guildOptions = guildOptions.Value;
 
             _interactionService.Log += message =>
             {
@@ -40,8 +44,14 @@ namespace Belix.DiscordBot.App.Extensions
 
         private async Task OnReady()
         {
-            await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-            await _interactionService.RegisterCommandsToGuildAsync(1009272583327322122);
+            try
+            {
+                await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+                await _interactionService.RegisterCommandsToGuildAsync(_guildOptions.Id);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             _client.InteractionCreated += OnInteractionCreated;
         }

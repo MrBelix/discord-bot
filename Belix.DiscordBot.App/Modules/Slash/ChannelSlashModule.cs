@@ -26,12 +26,12 @@ namespace Belix.DiscordBot.App.Modules.Slash
         [SlashCommand(name: "create", description: "Create a new voice channel")]
         public async Task Create(string name)
         {
-                var guild = _client.GetGuild(_options.Id);
+            var guild = _client.GetGuild(_options.Id);
 
-                var channel = await guild.CreateVoiceChannelAsync(name, x =>
-                {
-                    x.CategoryId = _options.TemporaryCategoryId;
-                });
+            var channel = await guild.CreateVoiceChannelAsync(name, x =>
+            {
+                x.CategoryId = _options.TemporaryCategoryId;
+            });
         }
     }
 }

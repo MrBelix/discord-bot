@@ -3,11 +3,7 @@ using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Belix.DiscordBot.App.Modules.Slash
 {
@@ -26,12 +22,21 @@ namespace Belix.DiscordBot.App.Modules.Slash
         [SlashCommand(name: "create", description: "Create a new voice channel")]
         public async Task Create(string name)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            /**
             var guild = _client.GetGuild(_options.Id);
 
             var channel = await guild.CreateVoiceChannelAsync(name, x =>
             {
                 x.CategoryId = _options.TemporaryCategoryId;
             });
+
+            var invite = await channel.CreateInviteAsync(maxUses: 1);
+
+            await Context.User.SendMessageAsync(invite.Url);
+            **/
+
+            await RespondAsync($"User {Context.User.Username} has created new temparary channel: \"{name}\"");
         }
     }
 }

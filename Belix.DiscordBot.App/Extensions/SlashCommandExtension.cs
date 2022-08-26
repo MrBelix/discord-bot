@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,12 +30,6 @@ namespace Belix.DiscordBot.App.Extensions
             _services = services;
             _interactionService = interactionService;
             _guildOptions = guildOptions.Value;
-
-            _interactionService.Log += message =>
-            {
-                Console.WriteLine(message.Message);
-                return Task.CompletedTask;
-            };
         }
 
         public void Register()
@@ -44,14 +39,8 @@ namespace Belix.DiscordBot.App.Extensions
 
         private async Task OnReady()
         {
-            try
-            {
                 await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
                 await _interactionService.RegisterCommandsToGuildAsync(_guildOptions.Id);
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
 
             _client.InteractionCreated += OnInteractionCreated;
         }

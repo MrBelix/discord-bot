@@ -18,12 +18,6 @@ namespace Belix.DiscordBot.App
         {
             _client = client;
             _config = config;
-
-            _client.Log += message =>
-            {
-                Console.WriteLine(message.Message);
-                return Task.CompletedTask;
-            };
         }
 
         public async Task RunAsync()

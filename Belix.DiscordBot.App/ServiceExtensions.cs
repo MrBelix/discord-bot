@@ -2,6 +2,7 @@
 using Belix.DiscordBot.Core;
 using Belix.DiscordBot.Core.Interfaces;
 using Discord.Interactions;
+using Discord.Net.WebSockets;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
